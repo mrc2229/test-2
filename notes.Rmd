@@ -1,0 +1,141 @@
+---
+title: "Class stuff"
+author: "Matthew Curran"
+date: "October 15, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(rvest)
+library(p8105.datasets)
+library(tidyverse)
+```
+
+##Playing with strings
+```{r}
+string_vec = c("my", "name", "is", "jeff")
+
+str_detect(string_vec, "jeff")
+
+str_detect(string_vec, "m")
+```
+
+```{r}
+str_replace(string_vec, "jeff", "Jeff")
+```
+
+```{r}
+string_vec = c(
+  "i think we all rule for participating",
+  "i think i have been caught",
+  "i think this will be quite fun actually",
+  "it will be fun, i think"
+  )
+
+str_detect(string_vec, "^i think")
+
+str_detect(string_vec, "i think$")
+```
+
+##Shows "bush" that starts with capital or lowercase but is lowercase after.
+```{r}
+string_vec = c(
+  "Y'all remember Pres. HW Bush?",
+  "I saw a green bush",
+  "BBQ and Bushwalking at Molonglo Gorge",
+  "BUSH -- LIVE IN CONCERT!!"
+  )
+
+str_detect(string_vec,"[Bb]ush")
+```
+
+```{r}
+string_vec = c(
+  '7th inning stretch',
+  '1st half soon to begin. Texas won the toss.',
+  'she is 5 feet 4 inches tall',
+  '3AM - cant sleep :('
+  )
+
+str_detect(string_vec, "^[0-9][a-zA-Z]")
+```
+
+```{r}
+string_vec = c(
+  'Its 7:11 in the evening',
+  'want to go to 7-11?',
+  'my flight is AA711',
+  'NetBios: scanning ip 203.167.114.66'
+  )
+
+str_detect(string_vec, "7.11")
+```
+ ##Some characters are “special”. These include [ and ], ( and ), and .. If you want to search for these, you have to indicate they’re special using \. Unfortunately, \ is also special, so things get weird.
+```{r}
+string_vec = c(
+  'The CI is [2, 5]',
+  ':-]',
+  ':-[',
+  'I found the answer on pages [6-7]',
+  '[..4]'
+  )
+
+str_detect(string_vec, "\\[")
+str_detect(string_vec, "\\[.")
+str_detect(string_vec, "\\[\\.")
+```
+
+* So do not usethe second of the detects in above chunk, needs a double slash for every special character
+
+
+```{r}
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names() %>%
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") %>%
+  select(id, visit, everything()) %>%
+  mutate(
+    visit = str_replace(visit, "bl", "00m"),
+    visit = fct_relevel(visit, str_c(c("00", "01", "06", "12"), "m"))) %>%
+  arrange(id, visit)
+
+print(pulse_data, n = 12)
+```
+
+```{r}
+devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
+
+```
+
+
+# Lecture November 7 Linear Model
+```{r word cout}
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+
+set.seed(1)
+```
+
+```{r}
+data("nyc_airbnb")
+
+nyc_airbnb = 
+  nyc_airbnb %>% 
+  mutate(stars = review_scores_location / 2) %>% 
+  rename(
+    boro = neighbourhood_group,
+    neighborhood = neighbourhood) %>% 
+  filter(boro != "Staten Island") %>% 
+  select(price, stars, boro, neighborhood, room_type)
+```
+
+
+
+
+
