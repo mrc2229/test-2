@@ -1,0 +1,158 @@
+---
+title: "EID"
+author: "Matthew Curran"
+date: "November 13, 2019"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library (readxl)
+```
+
+```{r}
+flu_data = read_excel(
+  "./files/flusurv-2019.xlsx"
+  ) %>%
+  janitor::clean_names()
+
+jan_data=flu_data%>%
+  filter(month1=="1") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+feb_data=flu_data%>%
+  filter(month1=="2") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+mar_data=flu_data%>%
+  filter(month1=="3") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+apr_data=flu_data%>%
+  filter(month1=="4") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+may_data=flu_data%>%
+  filter(month1=="5") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+june_data=flu_data%>%
+  filter(month1=="6") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+jul_data=flu_data%>%
+  filter(month1=="7") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+aug_data=flu_data%>%
+  filter(month1=="8") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+sep_data=flu_data%>%
+  filter(month1=="9") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+oct_data=flu_data%>%
+  filter(month1=="10") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+nov_data=flu_data%>%
+  filter(month1=="11") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+
+dec_data=flu_data%>%
+  filter(month1=="12") %>%
+  group_by(year1) %>%
+  filter(flu_pos=="1") %>%
+  count(flu_pos,name="flu_count")
+```
+
+```{r}
+subtype_data=flu_data %>%
+  filter(year1==c("2012", "2013")) %>%
+  select(month1, year1, flu_a, flu_b, h1, h3, h5, swinf)%>%
+  drop_na()%>%
+  mutate(
+    flu_a = recode(flu_a, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))%>%
+  mutate(
+    flu_b = recode(flu_b, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))%>%
+  mutate(
+    h1 = recode(h1, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))%>%
+  mutate(
+    h3 = recode(h3, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))%>%
+  mutate(
+    h5 = recode(h5, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))%>%
+  mutate(
+    swinf = recode(swinf, 
+                   "99" = "0",
+                   "1" = "1",
+                   "0"="0"))
+
+flu_a_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(flu_a=="1") %>%
+  count(flu_a,name="flu_a_count")
+
+flu_b_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(flu_b=="1") %>%
+  count(flu_b,name="flu_b_count")
+
+flu_h1_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(h1=="1") %>%
+  count(h1,name="h1_count")
+
+flu_h3_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(h3=="1") %>%
+  count(h3,name="h3_count")
+
+flu_h5_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(h5=="1") %>%
+  count(h5,name="h5_count")
+
+flu_swine_data=subtype_data%>%
+  group_by(month1, year1) %>%
+  filter(swinf=="1") %>%
+  count(swinf,name="swine_count")
+```
+
